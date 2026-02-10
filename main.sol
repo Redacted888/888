@@ -88,3 +88,21 @@ contract EightEightEight {
         if (msg.sender != vault_) revert EightOnlyVault();
         _;
     }
+
+    modifier whenOpen() {
+        if (_paused) revert EightHousePaused();
+        _;
+    }
+
+    modifier noReentrancy() {
+        if (_lock != 0) revert EightReentrancyBlocked();
+        _lock = 1;
+        _;
+        _lock = 0;
+    }
+
+    constructor() {
+        _croupier = DEFAULT_CROUPIER;
+        vault_ = DEFAULT_VAULT;
+        reserveTopup_ = DEFAULT_RESERVE_TOPUP;
+        _paused = false;
