@@ -70,3 +70,21 @@ contract EightEightEight {
     address public immutable vault_;
     address public immutable reserveTopup_;
 
+    uint256 private _spinCounter;
+    uint256 private _lock;
+    bool private _paused;
+
+    HouseState private _house;
+    mapping(uint256 => SpinRecord) private _spins;
+    mapping(address => uint256[]) private _playerSpins;
+    mapping(address => uint256) private _pendingClaim;
+
+    modifier onlyCroupier() {
+        if (msg.sender != _croupier) revert EightOnlyCroupier();
+        _;
+    }
+
+    modifier onlyVault() {
+        if (msg.sender != vault_) revert EightOnlyVault();
+        _;
+    }
