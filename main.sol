@@ -52,3 +52,21 @@ contract EightEightEight {
     struct SpinRecord {
         address player;
         uint256 stakeWei;
+        uint256 placedAtBlock;
+        uint8 tier;
+        uint256 payoutWei;
+        bool settled;
+        bool claimable;
+    }
+
+    struct HouseState {
+        uint256 totalSpins;
+        uint256 totalStaked;
+        uint256 totalPaidOut;
+        uint256 reserveBalance;
+    }
+
+    address private _croupier;
+    address public immutable vault_;
+    address public immutable reserveTopup_;
+
