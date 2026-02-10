@@ -106,3 +106,21 @@ contract EightEightEight {
         vault_ = DEFAULT_VAULT;
         reserveTopup_ = DEFAULT_RESERVE_TOPUP;
         _paused = false;
+        _house.reserveBalance = 0;
+        _house.totalSpins = 0;
+        _house.totalStaked = 0;
+        _house.totalPaidOut = 0;
+    }
+
+    receive() external payable {
+        if (msg.sender == reserveTopup_) {
+            _house.reserveBalance += msg.value;
+            emit ReserveTopped(msg.value);
+        }
+    }
+
+    function spin() external payable whenOpen noReentrancy returns (uint256 spinId) {
+        if (msg.value < SPIN_FLOOR_WEI) revert EightStakeBelowFloor();
+        if (msg.value > SPIN_CEILING_WEI) revert EightStakeAboveCeiling();
+
+        spinId = ++_spinCounter;
