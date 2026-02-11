@@ -250,3 +250,21 @@ contract EightEightEight {
         );
     }
 
+    function getHouseState() external view returns (
+        uint256 totalSpins,
+        uint256 totalStaked,
+        uint256 totalPaidOut,
+        uint256 reserveBalance
+    ) {
+        return (
+            _house.totalSpins,
+            _house.totalStaked,
+            _house.totalPaidOut,
+            _house.reserveBalance
+        );
+    }
+
+    function getPendingClaim(address player) external view returns (uint256) {
+        return _pendingClaim[player];
+    }
+
