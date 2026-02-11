@@ -142,3 +142,21 @@ contract EightEightEight {
         if (_house.reserveBalance < maxPayout) revert EightInsufficientReserve();
         if (_house.reserveBalance - maxPayout < HOUSE_RESERVE_MIN_WEI) revert EightReserveBelowMinimum();
 
+        uint256 roll = _entropy(spinId) % 10000;
+        uint8 tier;
+        if (roll < TIER_THREE_CHANCE_BPS) {
+            tier = 3;
+        } else if (roll < TIER_THREE_CHANCE_BPS + TIER_TWO_CHANCE_BPS) {
+            tier = 2;
+        } else if (roll < TIER_THREE_CHANCE_BPS + TIER_TWO_CHANCE_BPS + TIER_ONE_CHANCE_BPS) {
+            tier = 1;
+        } else {
+            tier = 0;
+        }
+
+        rec.tier = tier;
+        uint256 multBps = tier == 3 ? TIER_THREE_MULTIPLIER_BPS
+            : tier == 2 ? TIER_TWO_MULTIPLIER_BPS
+            : tier == 1 ? TIER_ONE_MULTIPLIER_BPS
+            : 0;
+        rec.payoutWei = (netStake * multBps) / 10000;
