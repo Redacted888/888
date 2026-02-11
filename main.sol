@@ -196,3 +196,21 @@ contract EightEightEight {
             _house.reserveBalance += amountWei;
             revert EightHouseClosed();
         }
+        emit HousePayout(vault_, amountWei, 2);
+    }
+
+    function sweepTreasury() external onlyCroupier noReentrancy {
+        uint256 excess = address(this).balance > _house.reserveBalance
+            ? address(this).balance - _house.reserveBalance
+            : 0;
+        if (excess == 0) revert EightInsufficientReserve();
+        uint256 toVault = (excess * VAULT_SHARE_BPS) / 10000;
+        if (toVault > 0) {
+            (bool ok,) = vault_.call{value: toVault}("");
+            if (ok) emit HousePayout(vault_, toVault, 3);
+        }
+        emit TreasurySwept(excess, block.number);
+    }
+
+    function setPaused(bool paused_) external onlyCroupier {
+        _paused = paused_;
