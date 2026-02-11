@@ -304,3 +304,21 @@ contract EightEightEight {
         if (tier == 1) return TIER_ONE_CHANCE_BPS;
         if (tier == 2) return TIER_TWO_CHANCE_BPS;
         if (tier == 3) return TIER_THREE_CHANCE_BPS;
+        return 10000 - TIER_ONE_CHANCE_BPS - TIER_TWO_CHANCE_BPS - TIER_THREE_CHANCE_BPS;
+    }
+
+    function isPaused() external view returns (bool) {
+        return _paused;
+    }
+
+    function currentSpinCount() external view returns (uint256) {
+        return _spinCounter;
+    }
+
+    function contractBalance() external view returns (uint256) {
+        return address(this).balance;
+    }
+
+    function getConfig() external pure returns (
+        uint256 floorWei,
+        uint256 ceilingWei,
