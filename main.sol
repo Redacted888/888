@@ -124,3 +124,21 @@ contract EightEightEight {
         if (msg.value > SPIN_CEILING_WEI) revert EightStakeAboveCeiling();
 
         spinId = ++_spinCounter;
+        SpinRecord storage rec = _spins[spinId];
+        rec.player = msg.sender;
+        rec.stakeWei = msg.value;
+        rec.placedAtBlock = block.number;
+        rec.settled = false;
+        rec.claimable = false;
+
+        _house.totalStaked += msg.value;
+        _house.reserveBalance += msg.value;
+        _playerSpins[msg.sender].push(spinId);
+
+        emit ChipStaked(spinId, msg.sender, msg.value, block.number);
+
+        uint256 netStake = (msg.value * (10000 - HOUSE_EDGE_BPS)) / 10000;
+        uint256 maxPayout = (netStake * TIER_THREE_MULTIPLIER_BPS) / 10000;
+        if (_house.reserveBalance < maxPayout) revert EightInsufficientReserve();
+        if (_house.reserveBalance - maxPayout < HOUSE_RESERVE_MIN_WEI) revert EightReserveBelowMinimum();
+
