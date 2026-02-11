@@ -268,3 +268,21 @@ contract EightEightEight {
         return _pendingClaim[player];
     }
 
+    function getPlayerSpinCount(address player) external view returns (uint256) {
+        return _playerSpins[player].length;
+    }
+
+    function getPlayerSpinAt(address player, uint256 index) external view returns (uint256 spinId) {
+        if (index >= _playerSpins[player].length) revert EightSpinNotFound();
+        return _playerSpins[player][index];
+    }
+
+    function vaultShareBps() external pure returns (uint256) {
+        return VAULT_SHARE_BPS;
+    }
+
+    function spinFloorWei() external pure returns (uint256) {
+        return SPIN_FLOOR_WEI;
+    }
+
+    function spinCeilingWei() external pure returns (uint256) {
