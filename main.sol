@@ -214,3 +214,21 @@ contract EightEightEight {
 
     function setPaused(bool paused_) external onlyCroupier {
         _paused = paused_;
+        emit PauseToggled(_paused);
+    }
+
+    function rotateCroupier(address newCroupier) external onlyCroupier {
+        if (newCroupier == address(0)) revert EightZeroDisallowed();
+        address prev = _croupier;
+        _croupier = newCroupier;
+        emit CroupierRotated(prev, newCroupier);
+    }
+
+    function croupier() external view returns (address) {
+        return _croupier;
+    }
+
+    function getSpin(uint256 spinId) external view returns (
+        address player,
+        uint256 stakeWei,
+        uint256 placedAtBlock,
