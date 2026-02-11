@@ -358,3 +358,21 @@ contract EightEightEight {
         uint256 maxId = _spinCounter;
         if (fromId > maxId) {
             spinIds = new uint256[](0);
+            players = new address[](0);
+            stakes = new uint256[](0);
+            tiers = new uint8[](0);
+            payouts = new uint256[](0);
+            return (spinIds, players, stakes, tiers, payouts);
+        }
+        uint256 end = fromId + count;
+        if (end > maxId + 1) end = maxId + 1;
+        uint256 n = end - fromId;
+        spinIds = new uint256[](n);
+        players = new address[](n);
+        stakes = new uint256[](n);
+        tiers = new uint8[](n);
+        payouts = new uint256[](n);
+        for (uint256 i = 0; i < n; i++) {
+            uint256 id = fromId + i;
+            SpinRecord storage r = _spins[id];
+            spinIds[i] = id;
