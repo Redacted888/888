@@ -286,3 +286,21 @@ contract EightEightEight {
     }
 
     function spinCeilingWei() external pure returns (uint256) {
+        return SPIN_CEILING_WEI;
+    }
+
+    function houseEdgeBps() external pure returns (uint256) {
+        return HOUSE_EDGE_BPS;
+    }
+
+    function tierMultiplierBps(uint8 tier) external pure returns (uint256) {
+        if (tier == 1) return TIER_ONE_MULTIPLIER_BPS;
+        if (tier == 2) return TIER_TWO_MULTIPLIER_BPS;
+        if (tier == 3) return TIER_THREE_MULTIPLIER_BPS;
+        return 0;
+    }
+
+    function tierChanceBps(uint8 tier) external pure returns (uint256) {
+        if (tier == 1) return TIER_ONE_CHANCE_BPS;
+        if (tier == 2) return TIER_TWO_CHANCE_BPS;
+        if (tier == 3) return TIER_THREE_CHANCE_BPS;
