@@ -178,3 +178,21 @@ contract EightEightEight {
         if (amount == 0) revert EightNoPendingPayout();
         _pendingClaim[msg.sender] = 0;
         (bool ok,) = msg.sender.call{value: amount}("");
+        if (!ok) {
+            _pendingClaim[msg.sender] = amount;
+            revert EightHouseClosed();
+        }
+        emit HousePayout(msg.sender, amount, 1);
+    }
+
+    function houseWithdraw(uint256 amountWei) external onlyVault noReentrancy {
+        if (amountWei == 0) revert EightZeroDisallowed();
+        uint256 balance = address(this).balance;
+        if (amountWei > balance) revert EightInsufficientReserve();
+        if (_house.reserveBalance < amountWei) revert EightInsufficientReserve();
+        _house.reserveBalance -= amountWei;
+        (bool ok,) = vault_.call{value: amountWei}("");
+        if (!ok) {
+            _house.reserveBalance += amountWei;
+            revert EightHouseClosed();
+        }
