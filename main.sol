@@ -322,3 +322,21 @@ contract EightEightEight {
     function getConfig() external pure returns (
         uint256 floorWei,
         uint256 ceilingWei,
+        uint256 edgeBps,
+        uint256 vaultShareBps_,
+        uint256 reserveMinWei,
+        uint256 multTier1Bps,
+        uint256 multTier2Bps,
+        uint256 multTier3Bps,
+        uint256 chanceTier1Bps,
+        uint256 chanceTier2Bps,
+        uint256 chanceTier3Bps
+    ) {
+        return (
+            SPIN_FLOOR_WEI,
+            SPIN_CEILING_WEI,
+            HOUSE_EDGE_BPS,
+            VAULT_SHARE_BPS,
+            HOUSE_RESERVE_MIN_WEI,
+            TIER_ONE_MULTIPLIER_BPS,
+            TIER_TWO_MULTIPLIER_BPS,
