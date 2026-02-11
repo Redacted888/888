@@ -394,3 +394,5 @@ contract EightEightEight {
             _spins[spinId].player,
             _spins[spinId].placedAtBlock
         )));
+    }
+}
