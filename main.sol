@@ -376,3 +376,21 @@ contract EightEightEight {
             uint256 id = fromId + i;
             SpinRecord storage r = _spins[id];
             spinIds[i] = id;
+            players[i] = r.player;
+            stakes[i] = r.stakeWei;
+            tiers[i] = r.tier;
+            payouts[i] = r.payoutWei;
+        }
+        return (spinIds, players, stakes, tiers, payouts);
+    }
+
+    function _entropy(uint256 spinId) internal view returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(
+            block.prevrandao,
+            block.timestamp,
+            block.chainid,
+            address(this),
+            spinId,
+            _spins[spinId].player,
+            _spins[spinId].placedAtBlock
+        )));
