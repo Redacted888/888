@@ -160,3 +160,21 @@ contract EightEightEight {
             : tier == 1 ? TIER_ONE_MULTIPLIER_BPS
             : 0;
         rec.payoutWei = (netStake * multBps) / 10000;
+        rec.settled = true;
+        rec.claimable = true;
+
+        _house.reserveBalance -= rec.payoutWei;
+        _house.totalPaidOut += rec.payoutWei;
+        _house.totalSpins += 1;
+
+        _pendingClaim[msg.sender] += rec.payoutWei;
+
+        emit TierHit(spinId, tier, multBps);
+        emit ReelStopped(spinId, msg.sender, tier, rec.payoutWei, block.number);
+    }
+
+    function claimPayout() external whenOpen noReentrancy {
+        uint256 amount = _pendingClaim[msg.sender];
+        if (amount == 0) revert EightNoPendingPayout();
+        _pendingClaim[msg.sender] = 0;
+        (bool ok,) = msg.sender.call{value: amount}("");
