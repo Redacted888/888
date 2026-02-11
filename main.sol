@@ -232,3 +232,21 @@ contract EightEightEight {
         address player,
         uint256 stakeWei,
         uint256 placedAtBlock,
+        uint8 tier,
+        uint256 payoutWei,
+        bool settled,
+        bool claimable
+    ) {
+        SpinRecord storage rec = _spins[spinId];
+        if (rec.placedAtBlock == 0) revert EightSpinNotFound();
+        return (
+            rec.player,
+            rec.stakeWei,
+            rec.placedAtBlock,
+            rec.tier,
+            rec.payoutWei,
+            rec.settled,
+            rec.claimable
+        );
+    }
+
