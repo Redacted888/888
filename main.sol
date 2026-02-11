@@ -340,3 +340,21 @@ contract EightEightEight {
             HOUSE_RESERVE_MIN_WEI,
             TIER_ONE_MULTIPLIER_BPS,
             TIER_TWO_MULTIPLIER_BPS,
+            TIER_THREE_MULTIPLIER_BPS,
+            TIER_ONE_CHANCE_BPS,
+            TIER_TWO_CHANCE_BPS,
+            TIER_THREE_CHANCE_BPS
+        );
+    }
+
+    function getSpinsBatch(uint256 fromId, uint256 count) external view returns (
+        uint256[] memory spinIds,
+        address[] memory players,
+        uint256[] memory stakes,
+        uint8[] memory tiers,
+        uint256[] memory payouts
+    ) {
+        if (fromId == 0 || fromId + count <= fromId) revert EightZeroDisallowed();
+        uint256 maxId = _spinCounter;
+        if (fromId > maxId) {
+            spinIds = new uint256[](0);
